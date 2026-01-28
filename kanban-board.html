@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board - Project Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #f5f7fa;
+            --column-bg: #ebecf0;
+            --card-bg: #ffffff;
+            --text-primary: #172b4d;
+            --text-secondary: #5e6c84;
+            --primary: #0052cc;
+            --primary-hover: #0065ff;
+            --success: #36b37e;
+            --warning: #ffab00;
+            --danger: #de350b;
+            --shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            --shadow-hover: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+
+        .header {
+            background: rgba(255,255,255,0.95);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--column-bg);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: #dfe1e6;
+        }
+
+        .board-container {
+            padding: 24px;
+            overflow-x: auto;
+        }
+
+        .board {
+            display: flex;
+            gap: 16px;
+            min-width: fit-content;
+        }
+
+        .column {
+            background: var(--column-bg);
+            border-radius: 12px;
+            width: 300px;
+            min-width: 300px;
+            max-height: calc(100vh - 140px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .column-header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #dfe1e6;
+        }
+
+        .column-title {
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .task-count {
+            background: var(--text-secondary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .column-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .icon-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            opacity: 0.6;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover {
+            opacity: 1;
+            background: rgba(0,0,0,0.1);
+        }
+
+        .column-content {
+            padding: 12px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .task-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            box-shadow: var(--shadow);
+            cursor: grab;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .task-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .task-card.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        .task-priority {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .priority-high {
+            background: #ffebe6;
+            color: var(--danger);
+        }
+
+        .priority-medium {
+            background: #fff0b3;
+            color: #974f0c;
+        }
+
+        .priority-low {
+            background: #e3fcef;
+            color: var(--success);
+        }
+
+        .task-title {
+            font-weight: 500;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .task-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .task-tags {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .tag {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            background: var(--column-bg);
+        }
+
+        .add-task-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .add-task-btn:hover {
+            background: rgba(0,0,0,0.05);
+            color: var(--text-primary);
+        }
+
+        .add-column-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px dashed rgba(255,255,255,0.4);
+            color: white;
+            width: 300px;
+            min-width: 300px;
+            height: 80px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .add-column-btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: white;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 24px 24px 0;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+
+        .modal-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dfe1e6;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .modal-footer {
+            padding: 0 24px 24px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #bf2600;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        /* Scrollbar Styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0,0,0,0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+
+            .column {
+                width: 280px;
+                min-width: 280px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📋 Kanban Board</h1>
+        <div class="header-actions">
+            <button class="btn btn-secondary" onclick="exportData()">📥 Export</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📤 Import</button>
+            <input type="file" id="importFile" style="display:none" accept=".json" onchange="importData(this)">
+            <button class="btn btn-primary" onclick="openTaskModal()">➕ New Task</button>
+        </div>
+    </div>
+
+    <div class="board-container">
+        <div class="board" id="board"></div>
+    </div>
+
+    <!-- Task Modal -->
+    <div class="modal-overlay" id="taskModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">New Task</h2>
+                <p class="modal-subtitle">Fill in the details below</p>
+            </div>
+            <div class="modal-body">
+                <form id="taskForm">
+                    <input type="hidden" id="taskId">
+                    <div class="form-group">
+                        <label for="taskTitle">Title *</label>
+                        <input type="text" id="taskTitle" required placeholder="Enter task title">
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDescription">Description</label>
+                        <textarea id="taskDescription" placeholder="Add a description..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskColumn">Column</label>
+                            <select id="taskColumn"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="taskPriority">Priority</label>
+                            <select id="taskPriority">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskDueDate">Due Date</label>
+                            <input type="date" id="taskDueDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="taskTags">Tags (comma separated)</label>
+                            <input type="text" id="taskTags" placeholder="bug, feature, urgent">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button type="button" class="btn btn-danger" id="deleteBtn" style="display:none" onclick="deleteTask()">Delete</button>
+                <button type="button" class="btn btn-primary" onclick="saveTask()">Save Task</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Column Modal -->
+    <div class="modal-overlay" id="columnModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="columnModalTitle">New Column</h2>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="columnName">Column Name *</label>
+                    <input type="text" id="columnName" required placeholder="e.g., Review">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeColumnModal()">Cancel</button>
+                <button type="button" class="btn btn-danger" id="deleteColumnBtn" style="display:none" onclick="deleteColumn()">Delete</button>
+                <button type="button" class="btn btn-primary" onclick="saveColumn()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let columns = JSON.parse(localStorage.getItem('kanban-columns')) || [
+            { id: 'col-1', title: 'To Do' },
+            { id: 'col-2', title: 'In Progress' },
+            { id: 'col-3', title: 'Review' },
+            { id: 'col-4', title: 'Done' }
+        ];
+
+        let tasks = JSON.parse(localStorage.getItem('kanban-tasks')) || [
+            { id: 'task-1', title: 'Design homepage mockup', description: 'Create Figma designs for the new landing page', columnId: 'col-1', priority: 'high', dueDate: '2026-02-01', tags: ['design', 'urgent'] },
+            { id: 'task-2', title: 'Fix navigation bug', description: 'Menu not closing on mobile devices', columnId: 'col-2', priority: 'high', dueDate: '2026-01-30', tags: ['bug'] },
+            { id: 'task-3', title: 'Update documentation', description: 'Add API endpoints to docs', columnId: 'col-4', priority: 'low', dueDate: '', tags: ['docs'] }
+        ];
+
+        let draggedTask = null;
+        let editingColumnId = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderBoard();
+            setupModalClosing();
+        });
+
+        // Render Board
+        function renderBoard() {
+            const board = document.getElementById('board');
+            board.innerHTML = '';
+
+            columns.forEach(column => {
+                const columnEl = createColumnElement(column);
+                board.appendChild(columnEl);
+            });
+
+            // Add "Add Column" button
+            const addColumnBtn = document.createElement('button');
+            addColumnBtn.className = 'add-column-btn';
+            addColumnBtn.innerHTML = '➕ Add Column';
+            addColumnBtn.onclick = () => openColumnModal();
+            board.appendChild(addColumnBtn);
+        }
+
+        function createColumnElement(column) {
+            const columnTasks = tasks.filter(t => t.columnId === column.id);
+            
+            const div = document.createElement('div');
+            div.className = 'column';
+            div.dataset.columnId = column.id;
+            
+            div.innerHTML = `
+                <div class="column-header">
+                    <div class="column-title">
+                        ${column.title}
+                        <span class="task-count">${columnTasks.length}</span>
+                    </div>
+                    <div class="column-actions">
+                        <button class="icon-btn" onclick="openColumnModal('${column.id}')">✏️</button>
+                    </div>
+                </div>
+                <div class="column-content" ondrop="drop(event, '${column.id}')" ondragover="allowDrop(event)">
+                    ${columnTasks.length === 0 ? `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📋</div>
+                            <p>No tasks yet</p>
+                        </div>
+                    ` : columnTasks.map(task => createTaskHTML(task)).join('')}
+                </div>
+                <div style="padding: 12px;">
+                    <button class="add-task-btn" onclick="openTaskModal(null, '${column.id}')">
+                        ➕ Add a task
+                    </button>
+                </div>
+            `;
+
+            return div;
+        }
+
+        function createTaskHTML(task) {
+            const priorityClass = `priority-${task.priority}`;
+            const priorityLabel = task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
+            const tagsHtml = task.tags?.map(tag => `<span class="tag">${tag}</span>`).join('') || '';
+            const dueDateHtml = task.dueDate ? `<span>📅 ${formatDate(task.dueDate)}</span>` : '';
+            
+            return `
+                <div class="task-card" draggable="true" ondragstart="drag(event, '${task.id}')" onclick="openTaskModal('${task.id}')">
+                    <span class="task-priority ${priorityClass}">${priorityLabel}</span>
+                    <div class="task-title">${escapeHtml(task.title)}</div>
+                    ${tagsHtml ? `<div class="task-tags">${tagsHtml}</div>` : ''}
+                    <div class="task-meta">
+                        ${dueDateHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Drag and Drop
+        function drag(event, taskId) {
+            draggedTask = taskId;
+            event.target.classList.add('dragging');
+            event.dataTransfer.effectAllowed = 'move';
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drop(event, columnId) {
+            event.preventDefault();
+            
+            if (draggedTask) {
+                const task = tasks.find(t => t.id === draggedTask);
+                if (task) {
+                    task.columnId = columnId;
+                    saveData();
+                    renderBoard();
+                }
+                draggedTask = null;
+            }
+        }
+
+        // Task Modal
+        function openTaskModal(taskId = null, defaultColumnId = null) {
+            const modal = document.getElementById('taskModal');
+            const form = document.getElementById('taskForm');
+            const deleteBtn = document.getElementById('deleteBtn');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            // Populate column select
+            const columnSelect = document.getElementById('taskColumn');
+            columnSelect.innerHTML = columns.map(col => 
+                `<option value="${col.id}">${col.title}</option>`
+            ).join('');
+
+            if (taskId) {
+                const task = tasks.find(t => t.id === taskId);
+                document.getElementById('taskId').value = task.id;
+                document.getElementById('taskTitle').value = task.title;
+                document.getElementById('taskDescription').value = task.description || '';
+                document.getElementById('taskColumn').value = task.columnId;
+                document.getElementById('taskPriority').value = task.priority;
+                document.getElementById('taskDueDate').value = task.dueDate || '';
+                document.getElementById('taskTags').value = task.tags?.join(', ') || '';
+                deleteBtn.style.display = 'inline-flex';
+                modalTitle.textContent = 'Edit Task';
+            } else {
+                form.reset();
+                document.getElementById('taskId').value = '';
+                document.getElementById('taskColumn').value = defaultColumnId || columns[0]?.id || '';
+                deleteBtn.style.display = 'none';
+                modalTitle.textContent = 'New Task';
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('taskModal').classList.remove('active');
+        }
+
+        function saveTask() {
+            const taskId = document.getElementById('taskId').value;
+            const title = document.getElementById('taskTitle').value.trim();
+            
+            if (!title) {
+                alert('Please enter a task title');
+                return;
+            }
+
+            const taskData = {
+                title,
+                description: document.getElementById('taskDescription').value.trim(),
+                columnId: document.getElementById('taskColumn').value,
+                priority: document.getElementById('taskPriority').value,
+                dueDate: document.getElementById('taskDueDate').value,
+                tags: document.getElementById('taskTags').value.split(',').map(t => t.trim()).filter(t => t)
+            };
+
+            if (taskId) {
+                const index = tasks.findIndex(t => t.id === taskId);
+                tasks[index] = { ...tasks[index], ...taskData };
+            } else {
+                tasks.push({
+                    id: 'task-' + Date.now(),
+                    ...taskData
+                });
+            }
+
+            saveData();
+            renderBoard();
+            closeModal();
+        }
+
+        function deleteTask() {
+            const taskId = document.getElementById('taskId').value;
+            if (confirm('Are you sure you want to delete this task?')) {
+                tasks = tasks.filter(t => t.id !== taskId);
+                saveData();
+                renderBoard();
+                closeModal();
+            }
+        }
+
+        // Column Modal
+        function openColumnModal(columnId = null) {
+            const modal = document.getElementById('columnModal');
+            const deleteBtn = document.getElementById('deleteColumnBtn');
+            const modalTitle = document.getElementById('columnModalTitle');
+
+            if (columnId) {
+                const column = columns.find(c => c.id === columnId);
+                document.getElementById('columnName').value = column.title;
+                editingColumnId = columnId;
+                deleteBtn.style.display = 'inline-flex';
+                modalTitle.textContent = 'Edit Column';
+            } else {
+                document.getElementById('columnName').value = '';
+                editingColumnId = null;
+                deleteBtn.style.display = 'none';
+                modalTitle.textContent = 'New Column';
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeColumnModal() {
+            document.getElementById('columnModal').classList.remove('active');
+        }
+
+        function saveColumn() {
+            const name = document.getElementById('columnName').value.trim();
+            
+            if (!name) {
+                alert('Please enter a column name');
+                return;
+            }
+
+            if (editingColumnId) {
+                const column = columns.find(c => c.id === editingColumnId);
+                column.title = name;
+            } else {
+                columns.push({
+                    id: 'col-' + Date.now(),
+                    title: name
+                });
+            }
+
+            saveData();
+            renderBoard();
+            closeColumnModal();
+        }
+
+        function deleteColumn() {
+            if (columns.length <= 1) {
+                alert('You must have at least one column');
+                return;
+            }
+
+            if (confirm('Are you sure? All tasks in this column will be deleted.')) {
+                // Move tasks to first remaining column or delete them
+                const remainingColumns = columns.filter(c => c.id !== editingColumnId);
+                const firstColumnId = remainingColumns[0]?.id;
+                
+                tasks = tasks.filter(t => {
+                    if (t.columnId === editingColumnId) {
+                        if (firstColumnId) {
+                            t.columnId = firstColumnId;
+                            return true;
+                        }
+                        return false;
+                    }
+                    return true;
+                });
+
+                columns = remainingColumns;
+                saveData();
+                renderBoard();
+                closeColumnModal();
+            }
+        }
+
+        // Data Persistence
+        function saveData() {
+            localStorage.setItem('kanban-columns', JSON.stringify(columns));
+            localStorage.setItem('kanban-tasks', JSON.stringify(tasks));
+        }
+
+        // Export/Import
+        function exportData() {
+            const data = { columns, tasks, exportedAt: new Date().toISOString() };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `kanban-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.columns && data.tasks) {
+                        columns = data.columns;
+                        tasks = data.tasks;
+                        saveData();
+                        renderBoard();
+                        alert('Data imported successfully!');
+                    } else {
+                        alert('Invalid file format');
+                    }
+                } catch (err) {
+                    alert('Error reading file: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            input.value = '';
+        }
+
+        // Utilities
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const today = new Date();
+            const diff = Math.ceil((date - today) / (1000 * 60 * 60 * 24));
+            
+            if (diff === 0) return 'Today';
+            if (diff === 1) return 'Tomorrow';
+            if (diff < 0) return 'Overdue';
+            
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        function setupModalClosing() {
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>
