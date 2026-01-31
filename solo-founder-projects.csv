@@ -1,0 +1,54 @@
+Project Name,Category,Description,Difficulty (1-5),Revenue Potential,Time to MVP,Market Demand,Technical Complexity,Best For,Startup Costs,Competition Level
+SaaS Boilerplate,Developer Tools,Pre-built authentication + database + billing code for SaaS startups,3,High,2-4 weeks,High,Medium,Full-stack devs,$0-500,Medium
+Notion Template Bundle,Productivity,Pre-designed templates for specific niches (freelancers students startups),1,Medium,1-2 weeks,High,Low,Anyone,$0,High
+AI Writing Assistant,AI Tools, niche content generator (e.g. LinkedIn posts legal docs medical notes),3,High,3-6 weeks,Very High,Medium,AI/ML curious,$100-300,High
+Chrome Extension,Browser Tools,Simple productivity or automation tool for specific workflow,2,Medium,2-4 weeks,Medium,Low-Medium,Frontend devs,$0,Medium
+Minecraft Server Plugin,Gaming,Custom game modes or mechanics for Minecraft servers,2,Medium,2-3 weeks,Medium,Medium,Java devs,$0,Medium
+Discord Bot,Community Tools,Server management moderation or utility bot for Discord communities,2,Medium,1-2 weeks,High,Low,Any dev,$0,High
+Shopify App,E-commerce,Plugin for Shopify stores solving specific merchant pain point,3,High,4-8 weeks,High,Medium,Full-stack devs,$0,Medium
+Figma Plugin,Design Tools,Automation or asset tool for designers,2,Medium,2-4 weeks,Medium,Low,Frontend devs,$0,Low-Medium
+Email Newsletter + Paid Sub,Content,Curated niche insights with paid tier (Substack model),1,High,Ongoing,High,Low,Writers/Experts,$0,High
+Micro-SaaS for Niche Industry,B2B SaaS,Very specific tool for one industry (e.g. dental scheduling pet grooming),3,High,4-8 weeks,Medium,Medium,Full-stack devs,$100-500,Low
+Obsidian Plugin,Productivity,Note-taking enhancement for Obsidian users,2,Medium,2-4 weeks,Medium,Low,Any dev,$0,Low
+Zapier Integration,Automation,Connector between apps for Zapier ecosystem,2,Medium,2-4 weeks,Medium,Low,API devs,$0,Medium
+WordPress Plugin,Web Tools,Feature extension for WordPress sites,2,Medium,2-4 weeks,High,Low-Medium,PHP devs,$0,Very High
+VS Code Extension,Developer Tools,Productivity or language support extension,2,Medium,2-4 weeks,High,Low,Any dev,$0,Medium-High
+Mobile App (Simple),Mobile,Utility or lifestyle app solving one problem well,3,Medium,4-8 weeks,Medium,Medium,Mobile devs,$100-300,High
+API as a Service,Infrastructure,Single-purpose API developers pay to use,3,High,4-8 weeks,Medium,Medium,Backend devs,$50-200,Low-Medium
+Digital Product Templates,Creative,Resume designs pitch decks social media templates,1,Medium,1-2 weeks,High,Low,Designers,$0,Very High
+Browser Automation Script,Productivity,Automated task runner for specific workflow (sell as service),2,Medium,1-3 weeks,Medium,Low-Medium,Any dev,$0,Low
+Online Course + Community,Education,Teach specific skill with community access,2,High,4-6 weeks,High,Low,Experts,$100-500,Medium
+Niche Job Board,Recruitment,Curated jobs for specific industry or role,2,Medium,2-4 weeks,Medium,Low,Any dev,$0,Medium
+SaaS Starter Kit,Education,Video + code teaching how to build specific type of app,2,High,3-5 weeks,Medium,Low,Full-stack devs,$0,Medium
+Open Source Project + Support,Developer Tools,Free tool with paid support/hosting,3,High,Ongoing,Medium,Medium,Any dev,$0,Low
+AI Photo/Video Tool,AI Tools,Niche image or video generation/editing,4,High,6-12 weeks,High,High,AI/ML devs,$200-500,High
+Landing Page Templates,Web Design,High-converting templates for specific use cases,1,Medium,1-2 weeks,High,Low,Designers,$0,High
+Analytics Dashboard,Data,Simple analytics for niche data source,3,Medium,3-5 weeks,Medium,Medium,Full-stack devs,$100-300,Medium
+Form Builder for Niche,Productivity,Specialized forms for industry (healthcare legal events),3,Medium,3-5 weeks,Medium,Medium,Full-stack devs,$100-300,Medium
+Calendly Alternative,Niche Scheduling,Booking tool for specific profession (consultants trainers),3,Medium,4-6 weeks,Medium,Medium,Full-stack devs,$100-300,High
+Invoice Generator for Niche,Finance,Simplified invoicing for specific freelancers/industries,2,Medium,2-3 weeks,Medium,Low,Any dev,$0,Medium
+Social Media Scheduler,Social Tools,Post scheduling for specific platform or niche,3,Medium,3-5 weeks,High,Medium,Full-stack devs,$100-300,Very High
+Portfolio Website Generator,Web Tools,One-click portfolio for specific profession,2,Medium,2-4 weeks,Medium,Low,Frontend devs,$0,Medium
+AI Meeting Assistant,AI Tools,Transcription + summary for specific meeting type,4,High,6-10 weeks,High,High,AI/ML devs,$200-500,High
+Habit Tracker App,Wellness,Simple habit tracking with unique angle/gamification,2,Medium,2-4 weeks,Medium,Low,Mobile devs,$0,Very High
+Recipe App with AI,Food,Meal planning with AI suggestions for dietary restrictions,3,Medium,4-6 weeks,Medium,Medium,Full-stack devs,$100-300,Medium
+Personal Finance Tool,Finance,Budget tracking with specific focus (couples freelancers investors),3,Medium,3-5 weeks,High,Medium,Full-stack devs,$0,High
+Flashcard App for Niche,Education,Spaced repetition for specific exam or skill,2,Medium,2-4 weeks,Medium,Low,Any dev,$0,Medium
+URL Shortener with Analytics,Marketing,Branded links + simple analytics,2,Medium,1-2 weeks,Medium,Low,Backend devs,$0,High
+Screenshot/API Status Page,DevOps,Simple uptime monitoring + status pages,2,Medium,2-3 weeks,Medium,Low,Backend devs,$50-100,Medium
+GitHub Bot/Action,Developer Tools,Automated workflow for repos,2,Medium,1-3 weeks,Medium,Low,Any dev,$0,Medium
+Niche Newsletter Aggregator,Content,Curated articles for specific industry,1,Medium,1-2 weeks,Low,Low,Anyone,$0,Low
+Virtual Coworking Space,Community,Zoom room for focused work sessions,1,Medium,1 week,Medium,Low,Anyone,$0,Low
+PDF Tool Suite,Productivity,Simple PDF operations (merge split compress),2,Medium,2-3 weeks,High,Low,Any dev,$0,Very High
+Password Manager for Teams,Security,Simplified team password sharing,4,High,8-12 weeks,Medium,High,Security-focused devs,$200-500,Medium
+E-signature for Niche,Legal,DocuSign alternative for specific industry,4,High,8-12 weeks,Medium,High,Full-stack devs,$500-1000,High
+Marketplace for Digital Goods,E-commerce,Platform for selling templates assets (self-hosted),3,High,6-10 weeks,Medium,Medium,Full-stack devs,$200-500,Medium
+AI Customer Support Bot,AI Tools,Chatbot trained on company docs,3,High,4-6 weeks,High,Medium,AI/ML devs,$100-300,High
+Content Calendar Tool,Marketing,Editorial calendar for content teams,3,Medium,3-5 weeks,Medium,Medium,Full-stack devs,$100-300,Medium
+Code Snippet Manager,Developer Tools,Organized code snippet storage with search,2,Medium,2-4 weeks,Medium,Low,Any dev,$0,Medium
+Niche Directory Website,SEO,Curated list of tools/resources for industry,1,Medium,1-2 weeks,Medium,Low,Anyone,$0,Medium
+Subscription Box Curator,Physical Product,Curated boxes for niche hobby (digital-first research),1,Medium,2-4 weeks,Low,Low,Anyone,$200-500,Low
+Remote Team Icebreaker Tool,HR/Team,Virtual team building activities platform,2,Medium,2-3 weeks,Low,Low,Any dev,$0,Low
+SEO Audit Tool,Marketing,Simple site analysis with actionable tips,3,Medium,3-5 weeks,Medium,Medium,Full-stack devs,$100-300,Medium
+Wiki/Documentation Tool,Productivity,Simple team knowledge base,3,Medium,3-5 weeks,Medium,Medium,Full-stack devs,$0,High
+Time Tracking for Niche,Productivity,Simplified time tracking for specific profession,2,Medium,2-4 weeks,Medium,Low,Any dev,$0,High

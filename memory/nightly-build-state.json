@@ -1,0 +1,24 @@
+{
+  "schedule": "0 2 * * *",
+  "timezone": "UTC",
+  "targetTime": "8:00 AM IST",
+  "lastRun": "2026-01-30T21:00:00Z",
+  "buildsCompleted": 1,
+  "currentFocus": "daylog_cli",
+  "builds": [
+    {
+      "date": "2026-01-30",
+      "name": "daylog",
+      "description": "Daily journaling CLI",
+      "path": "~/night-builds/daylog",
+      "status": "complete"
+    }
+  ],
+  "ideasQueue": [
+    "Morning AI/tech news briefing",
+    "Git repo status summary",
+    "Weekly AI roundup compilation",
+    "Shell aliases for common commands",
+    "Project commit activity tracker"
+  ]
+}
